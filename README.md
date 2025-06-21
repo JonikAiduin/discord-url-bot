@@ -13,7 +13,7 @@ mkdir discord-url-bot
 cd discord-url-bot
 ```
 
-Then, put all the files from the discord-url-bot folder in this repository into that directory.
+Then, put all the files from the discord-url-bot/bot folder in this repository into that directory.
 
 Now, you'll need to go to the Discord Developer Portal and create your bot, then enable the required "Intents" for this bot to run.
 - Visit https://discord.com/developers/applications
