@@ -26,16 +26,19 @@ DOMAIN_REPLACEMENTS = {
     'www.tiktok.com': 'vxtiktok.com',
     
     # Reddit
-    'reddit.com': 'vxreddit.com',
-    'www.reddit.com': 'vxreddit.com',
-    'old.reddit.com': 'vxreddit.com',
-    'new.reddit.com': 'vxreddit.com',
-    'm.reddit.com': 'vxreddit.com',
+    'reddit.com': 'rxddit.com',
+    'www.reddit.com': 'rxddit.com',
+    'old.reddit.com': 'rxddit.com',
+    'new.reddit.com': 'rxddit.com',
+    'm.reddit.com': 'rxddit.com',
     
     # Pinterest (commonly shared, terrible embeds)
     'pinterest.com': 'pinimg.com',
     'www.pinterest.com': 'pinimg.com',
     'pin.it': 'pinimg.com',  # Pinterest short links
+    
+    # Bluesky
+    'bsky.app': 'cbsky.app',
     
     # Twitch (clips don't embed well)
     'twitch.tv': 'twitchtracker.com',
@@ -90,7 +93,8 @@ def clean_url(url):
 def replace_social_urls(text):
     """Find and replace social media URLs in text"""
     # Regex pattern to match URLs
-    url_pattern = r'https?://(?:(?:www\.|old\.|new\.|m\.|clips\.)?(?:reddit\.com|twitch\.tv)|(?:www\.)?(?:twitter\.com|x\.com|instagram\.com|tiktok\.com|pinterest\.com)|pin\.it)[^\s]*'
+    url_pattern = r'https?://(?:(?:www\.|old\.|new\.|m\.|clips\.)?(?:reddit\.com|twitch\.tv)|(?:www\.)?(?:twitter\.com|x\.com|instagram\.com|tiktok\.com|pinterest\.com|bsky\.app)|pin\.it)[^\s]*'
+
 
     
     def replace_url(match):
@@ -139,7 +143,8 @@ async def on_message(message):
         return
     
     # Check if message contains URLs from target domains
-    url_pattern = r'https?://(?:(?:www\.|old\.|new\.|m\.|clips\.)?(?:reddit\.com|twitch\.tv)|(?:www\.)?(?:twitter\.com|x\.com|instagram\.com|tiktok\.com|pinterest\.com)|pin\.it)[^\s]*'
+    url_pattern = r'https?://(?:(?:www\.|old\.|new\.|m\.|clips\.)?(?:reddit\.com|twitch\.tv)|(?:www\.)?(?:twitter\.com|x\.com|instagram\.com|tiktok\.com|pinterest\.com|bsky\.app)|pin\.it)[^\s]*'
+
     
     if re.search(url_pattern, message.content, re.IGNORECASE):
         # Replace URLs
@@ -148,14 +153,15 @@ async def on_message(message):
         # Only reply if URLs were actually changed
         if new_content != message.content:
             # Extract just the URLs for a cleaner response
-            original_urls = re.findall(r'https?://(?:(?:www\.|old\.|new\.|m\.|clips\.)?(?:reddit\.com|twitch\.tv)|(?:www\.)?(?:twitter\.com|x\.com|instagram\.com|tiktok\.com|pinterest\.com)|pin\.it)[^\s]*', 
+            original_urls = re.findall(r'https?://(?:(?:www\.|old\.|new\.|m\.|clips\.)?(?:reddit\.com|twitch\.tv)|(?:www\.)?(?:twitter\.com|x\.com|instagram\.com|tiktok\.com|pinterest\.com|bsky\.app)|pin\.it)[^\s]*', 
                                      message.content, re.IGNORECASE)
-            new_urls = re.findall(r'https?://(?:fxtwitter\.com|fixupx\.com|in\.nyoom\.io|vxtiktok\.com|rxddit\.com|pinimg\.com|twitchtracker\.com)[^\s]*', 
+            new_urls = re.findall(r'https?://(?:fxtwitter\.com|fixupx\.com|instagramez\.com|vxtiktok\.com|rxddit\.com|pinimg\.com|twitchtracker\.com|cbsky\.app)[^\s]*'
+, 
                                 new_content, re.IGNORECASE)
             
             if new_urls:
                 # Create response with just the fixed URLs
-                response = "Here are the fixed links:\n" + "\n".join(new_urls)
+                response = "It looks like you've posted a social media link that doesn't play nicely with discord. Here is a link with a working embed:\n" + "\n".join(new_urls)
                 
                 # Reply to the original message
                 await message.reply(response, mention_author=False)
